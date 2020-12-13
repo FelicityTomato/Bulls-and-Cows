@@ -54,12 +54,13 @@ int main(){
             cin >> ans[i];
         }
         if(ans[0]==4) return 0;
-        it = st.end();
-        it--;
-        for( ;it!=st.begin(); it--){
+        // 資料來源：https://www.techiedelight.com/remove-elements-set-cpp/
+        for(it = st.begin() ;it!=st.end(); ){
             bool check_ans= check( ans[0], ans[1], *it, gs);
             if (check_ans == false) {
-                it = st.erase(it);
+                st.erase(it++);
+            } else {
+                ++it;
             }
         }
         
