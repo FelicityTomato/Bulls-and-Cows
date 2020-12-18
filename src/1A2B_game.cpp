@@ -5,33 +5,31 @@
 #include <stdio.h>
 using namespace std;
 
-int arr[4] = {-1,-1,-1,-1};
 set<string> st;
-
-string trueans="abcd";
+string trueans="abcd";  //定義global：trueans變數則無須回傳值
 void gen_trueans(){
     srand(time(0));
-    set<int> st;
+    set<int> st;  //set記錄以選到的數並避免重複
     int num;
     for (int i=0; i<4; i++) {
         do {
-            num=rand()%10;
+            num=rand()%10;  //利用rand隨機產出並利用餘數控制範圍
         } while (st.count(num)!=0);
         st.insert(num);
         trueans[i]=num+'0';
     }
 }
-//列出來所有可能
+
+// 使用遞迴列出來所有可能解
+string arr = "abcd";
 void gen_allposible(int idx){
-    for(int i=0; i<10; i++){
+    for(int i='0'; i<='9'; i++){ // 產生 char '0' ~ '9'
         if(arr[0] != i && arr[1] != i && arr[2] != i ){
             arr[idx]=i;
             if(idx==3){
-                string s = "abcd";
-                for(int j=0; j<4; j++)  s[j] = arr[j] + '0';
-                st.insert(s);
+                st.insert(arr);  //使用set記錄所有可能的解
             }
-            else gen_allposible(idx+1);
+            else gen_allposible(idx+1);  //遞迴
             arr[idx]=-1;
         }
     }
@@ -69,7 +67,7 @@ int main(){
         for (int i=0; i<4; i++){
             for (int j=0; j<4; j++){
                 if (trueans[i]==guess[j]) {
-                    if(i==j) A++;
+                    if(i==j) A++;  //先比較Ａ在比較Ｂ可以避免重複計算
                     else B++;
                     break;
                 }
@@ -82,8 +80,8 @@ int main(){
         else cout <<"The hint is "<< A << "A" << B << "B\n";
 
         // 電腦開始猜
-        set<string>::iterator it;
-        it = next(st.begin(), rand() % st.size());
+        set<string>::iterator it; // 定義一個 iterator
+        it = next(st.begin(), rand() % st.size()); // rand 指到set中的一個可能解
         string gs= *it;
         //cout << "------ " << st.size() << endl;
         cout << "\nMy turn. I guess the number is "<< gs << '\n';
@@ -95,15 +93,17 @@ int main(){
             cout << "---- You Lose ----\n";
             break;
         }
-        for(it = st.begin() ;it!=st.end(); ){
-            bool check_ans= check( ans[0], ans[1], *it, gs);
-            if (check_ans == false) {
-                st.erase(it++);
+
+        // 參考：https://www.techiedelight.com/remove-elements-set-cpp/
+        for(it = st.begin() ;it!=st.end(); ){ // 從第一個元素，到set結束
+            bool check_ans= check( ans[0], ans[1], *it, gs); // 檢查是否與Hint相符
+            if (check_ans == false) {  
+                st.erase(it++); // 避免iterator指到set中已刪除的元素，所以要這樣寫
             } else {
                 ++it;
             }
         }
-        if (st.size()==0) {
+        if (st.size()==0) {  //沒有可能的解卻未產生答案代表玩家未依照規定輸入
             cout << "---- OH!! You cheated. ----\n";
             break;
         }

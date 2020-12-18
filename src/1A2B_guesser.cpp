@@ -5,17 +5,15 @@
 #include <stdio.h>
 using namespace std;
 
-int arr[4] = {-1,-1,-1,-1};
+string arr = "abcd";
 set<string> st;
 
 void may(int idx){
-    for(int i=0; i<10; i++){
+    for(int i= '0'; i<='9'; i++){
         if(arr[0] != i && arr[1] != i && arr[2] != i ){
-            arr[idx]=i;
+            arr[idx]= i;
             if(idx==3){
-                string s = "abcd";
-                for(int j=0; j<4; j++)  s[j] = arr[j] + '0';
-                st.insert(s);
+                st.insert(arr);
             }
             else may(idx+1);
             arr[idx]=-1;
