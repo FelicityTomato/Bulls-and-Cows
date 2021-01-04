@@ -67,7 +67,7 @@ int main(){
         for (int i=0; i<4; i++){
             for (int j=0; j<4; j++){
                 if (trueans[i]==guess[j]) {
-                    if(i==j) A++;  //先比較Ａ在比較Ｂ可以避免重複計算
+                    if(i==j) A++;  //先比較Ａ再比較Ｂ可以避免重複計算
                     else B++;
                     break;
                 }
