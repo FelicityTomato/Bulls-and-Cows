@@ -1,11 +1,53 @@
+// Compiler arguments: g++ -std=c++11
 #include <iostream>
 #include <string>
 #include <set>
 #include <time.h>
 #include <stdio.h>
+#include <vector>
 using namespace std;
 
 set<string> st;
+struct anss{
+    string ta;
+    int a;
+    int b;
+};
+vector <anss> Record;
+/* 
++------------+------------+
+|  PLAYER    |    PC      |
++--------A-B-+--------A-B-+
+| 1234   1 2 | 1234   0 2 |
+| 1243   2 1 |            |
++------------+------------+
+*/
+void printout() {
+    cout << "+------------+------------+\n"
+         << "|  PLAYER    |    PC      |\n"
+         << "+--------A-B-+--------A-B-+\n";
+    for (int i =0; i<Record.size(); i++ ) {
+        cout << "| " << Record[i].ta
+            << "   " << Record[i].a
+            << " "   << Record[i].b
+            << " ";
+        
+        i++;
+        if (i == Record.size()) {
+            cout <<"|            |\n";
+        } else {
+            cout << "| " << Record[i].ta
+            << "   " << Record[i].a
+            << " "   << Record[i].b
+            << " |\n";
+        }
+        
+    }
+
+    cout << "+------------+------------+\n";
+}
+
+
 string trueans="abcd";  //定義global：trueans變數則無須回傳值
 void gen_trueans(){
     srand(time(0));
@@ -77,8 +119,11 @@ int main(){
             cout << "---- You Win. ----\n";
             break;
         }
-        else cout <<"The hint is "<< A << "A" << B << "B\n";
-
+        else {
+            Record.push_back({guess, A, B});
+            printout();
+            cout <<"The hint is "<< A << "A" << B << "B\n";
+        }
         // 電腦開始猜
         set<string>::iterator it; // 定義一個 iterator
         it = next(st.begin(), rand() % st.size()); // rand 指到set中的一個可能解
@@ -103,6 +148,8 @@ int main(){
                 ++it;
             }
         }
+        Record.push_back({gs, ans[0], ans[1]});
+        printout();
         if (st.size()==0) {  //沒有可能的解卻未產生答案代表玩家未依照規定輸入
             cout << "---- OH!! You cheated. ----\n";
             break;
